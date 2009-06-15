@@ -53,6 +53,14 @@ class QueryCacheTest < Test::Unit::TestCase
       assert_instance_of String, Task.connection.select_value("SELECT count(*) AS count_all FROM tasks")
     end
   end
+
+  def test_cache_handles_complicated_models_correctly
+     # complicated in this case implies Marshal.dump/Marshal.load is needed
+     # to successfully store in memcached
+     User.cache do
+        assert_queries(1) { User.find(1); User.find(1) }
+     end
+  end
 end
 
 uses_mocha 'QueryCacheExpiryTest' do

@@ -432,6 +432,32 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "triangles", :force => true do |t|
   end
 
+  create_table "users", :force => true do |t|
+     t.string   "username",          :limit => 50
+     t.string   "first_name",        :limit => 100
+     t.string   "middle_name",       :limit => 100
+     t.string   "last_name",         :limit => 100
+     t.text     "full_name"
+     t.string   "title"
+     t.string   "email",             :limit => 100
+     t.string   "im_id",        :limit => 100
+     t.integer  "employee_id"
+     t.string   "manager_username",  :limit => 50
+     t.integer  "manager_id"
+     t.string   "phone_number",      :limit => 100
+     t.integer  "acting_manager_id"
+     t.boolean  "picture_exists",                   :default => false
+     t.boolean  "enabled"
+     t.datetime "updated_at"
+     t.integer  "updated_by",                       :default => 1,      :null => false
+     t.datetime "created_at"
+     t.integer  "created_by",                       :default => 1,      :null => false
+     t.integer  "realm_id"
+     t.boolean  "manager_valid",                    :default => false
+     t.string   "work_country",      :limit => 50
+     t.string   "materialized_path",                :default => "001."
+  end
+
   create_table "vertices", :force => true do |t|
     t.string "label"
   end
