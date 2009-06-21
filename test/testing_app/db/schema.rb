@@ -29,6 +29,46 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "favorite_author_id", :limit => 11
   end
 
+  create_table "authorization_request_items", :force => true do |t|
+    t.integer  "authorization_request_id", :limit => 11, :default => 0,         :null => false
+    t.integer  "system_role_id",           :limit => 11, :default => 0,         :null => false
+    t.datetime "updated_at"
+    t.integer  "updated_by",               :limit => 11, :default => 1,         :null => false
+    t.datetime "created_at"
+    t.integer  "created_by",               :limit => 11, :default => 1,         :null => false
+    t.integer  "reviewing_user_id",        :limit => 11, :default => 1,         :null => false
+    t.string   "reviewing_user_type"
+    t.integer  "status",                   :limit => 11
+    t.string   "state",                                  :default => "pending", :null => false
+  end
+
+  add_index "authorization_request_items", ["authorization_request_id"], :name => "idx_authorization_request_item_request_id"
+  add_index "authorization_request_items", ["reviewing_user_id"], :name => "idx_reviewing_user_id"
+  add_index "authorization_request_items", ["reviewing_user_type"], :name => "idx_reviewing_user_type"
+  add_index "authorization_request_items", ["status"], :name => "index_authorization_request_items_on_status"
+  add_index "authorization_request_items", ["state"], :name => "index_authorization_request_items_on_state"
+
+  create_table "authorization_requests", :force => true do |t|
+    t.integer  "user_id",                 :limit => 11, :default => 0,         :null => false
+    t.integer  "authorization_type_id",   :limit => 11, :default => 1,         :null => false
+    t.integer  "authorization_period_id", :limit => 11, :default => 0,         :null => false
+    t.integer  "requesting_user_id",      :limit => 11, :default => 0,         :null => false
+    t.integer  "pending_items",           :limit => 11, :default => 0,         :null => false
+    t.text     "business_justification"
+    t.datetime "expires_at"
+    t.datetime "updated_at"
+    t.integer  "updated_by",              :limit => 11, :default => 1,         :null => false
+    t.datetime "created_at"
+    t.integer  "created_by",              :limit => 11, :default => 1,         :null => false
+    t.integer  "status",                  :limit => 11
+    t.string   "state",                                 :default => "pending", :null => false
+  end
+
+  add_index "authorization_requests", ["user_id"], :name => "idx_user_id"
+  add_index "authorization_requests", ["user_id"], :name => "idx_user_id_status"
+  add_index "authorization_requests", ["status"], :name => "index_authorization_requests_on_status"
+  add_index "authorization_requests", ["state"], :name => "index_authorization_requests_on_state"
+
   create_table "authors", :force => true do |t|
     t.string  "name",                                  :null => false
     t.integer "author_address_id",       :limit => 11
@@ -433,29 +473,29 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table "users", :force => true do |t|
-     t.string   "username",          :limit => 50
-     t.string   "first_name",        :limit => 100
-     t.string   "middle_name",       :limit => 100
-     t.string   "last_name",         :limit => 100
-     t.text     "full_name"
-     t.string   "title"
-     t.string   "email",             :limit => 100
-     t.string   "im_id",        :limit => 100
-     t.integer  "employee_id"
-     t.string   "manager_username",  :limit => 50
-     t.integer  "manager_id"
-     t.string   "phone_number",      :limit => 100
-     t.integer  "acting_manager_id"
-     t.boolean  "picture_exists",                   :default => false
-     t.boolean  "enabled"
-     t.datetime "updated_at"
-     t.integer  "updated_by",                       :default => 1,      :null => false
-     t.datetime "created_at"
-     t.integer  "created_by",                       :default => 1,      :null => false
-     t.integer  "realm_id"
-     t.boolean  "manager_valid",                    :default => false
-     t.string   "work_country",      :limit => 50
-     t.string   "materialized_path",                :default => "001."
+    t.string   "username",          :limit => 50
+    t.string   "first_name",        :limit => 100
+    t.string   "middle_name",       :limit => 100
+    t.string   "last_name",         :limit => 100
+    t.text     "full_name"
+    t.string   "title"
+    t.string   "email",             :limit => 100
+    t.string   "im_id",             :limit => 100
+    t.integer  "employee_id",       :limit => 11
+    t.string   "manager_username",  :limit => 50
+    t.integer  "manager_id",        :limit => 11
+    t.string   "phone_number",      :limit => 100
+    t.integer  "acting_manager_id", :limit => 11
+    t.boolean  "picture_exists",                   :default => false
+    t.boolean  "enabled"
+    t.datetime "updated_at"
+    t.integer  "updated_by",        :limit => 11,  :default => 1,      :null => false
+    t.datetime "created_at"
+    t.integer  "created_by",        :limit => 11,  :default => 1,      :null => false
+    t.integer  "realm_id",          :limit => 11
+    t.boolean  "manager_valid",                    :default => false
+    t.string   "work_country",      :limit => 50
+    t.string   "materialized_path",                :default => "001."
   end
 
   create_table "vertices", :force => true do |t|
